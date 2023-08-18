@@ -1,0 +1,28 @@
+2023-08-18T17:37:05.684+0800	INFO	gmqtt/main.go:52	工作目录：E:\MyRepos\go\gmqtt\cmd\gmqtt
+2023-08-18T17:37:05.707+0800	INFO	server/server.go:1124	init plugin hook wrappers
+2023-08-18T17:37:05.708+0800	INFO	log/log.go:204	2023/08/18 17:37:05 [INFO] serf: EventMemberJoin: DESKTOP-JK33A17 192.168.1.122	{"plugin": "federation"}
+2023-08-18T17:37:05.708+0800	INFO	server/server.go:882	open persistence succeeded	{"type": "memory"}
+2023-08-18T17:37:05.708+0800	INFO	server/server.go:905	init session store succeeded	{"type": "memory", "session_total": 0}
+2023-08-18T17:37:05.708+0800	INFO	server/server.go:928	init queue store succeeded	{"type": "memory", "session_total": 0}
+2023-08-18T17:37:05.709+0800	INFO	server/server.go:929	init subscription store succeeded	{"type": "memory", "client_total": 0}
+2023-08-18T17:37:05.709+0800	INFO	server/server.go:1361	loading plugin	{"name": "prometheus"}
+2023-08-18T17:37:05.710+0800	INFO	server/server.go:1361	loading plugin	{"name": "admin"}
+2023-08-18T17:37:05.710+0800	INFO	server/server.go:1361	loading plugin	{"name": "federation"}
+2023-08-18T17:37:05.711+0800	INFO	federation/federation.go:561	retry join succeed	{"plugin": "federation"}
+2023-08-18T17:37:05.711+0800	INFO	server/server.go:1409	gmqtt server started	{"tcp server listen on": ["[::]:1883"], "websocket server listen on": [":8883"]}
+2023-08-18T17:37:05.711+0800	INFO	server/api_registrar.go:238	gRPC server started	{"bind_address": "tcp://127.0.0.1:8084"}
+2023-08-18T17:37:05.711+0800	INFO	server/api_registrar.go:246	HTTP server started	{"bind_address": "tcp://127.0.0.1:8083", "gRPC_endpoint": "tcp://127.0.0.1:8084"}
+2023-08-18T18:10:14.395+0800	INFO	server/server.go:1124	init plugin hook wrappers
+2023-08-18T18:12:56.753+0800	INFO	server/server.go:1124	init plugin hook wrappers
+2023-08-18T18:12:56.780+0800	INFO	log/log.go:204	2023/08/18 18:12:56 [INFO] serf: EventMemberJoin: DESKTOP-JK33A17 192.168.1.122	{"plugin": "federation"}
+2023-08-18T18:12:56.781+0800	INFO	server/server.go:882	open persistence succeeded	{"type": "memory"}
+2023-08-18T18:12:56.781+0800	INFO	server/server.go:905	init session store succeeded	{"type": "memory", "session_total": 0}
+2023-08-18T18:12:56.781+0800	INFO	server/server.go:928	init queue store succeeded	{"type": "memory", "session_total": 0}
+2023-08-18T18:12:56.782+0800	INFO	server/server.go:929	init subscription store succeeded	{"type": "memory", "client_total": 0}
+2023-08-18T18:12:56.782+0800	INFO	server/server.go:1361	loading plugin	{"name": "prometheus"}
+2023-08-18T18:12:56.782+0800	INFO	server/server.go:1361	loading plugin	{"name": "admin"}
+2023-08-18T18:12:56.783+0800	INFO	server/server.go:1361	loading plugin	{"name": "federation"}
+2023-08-18T18:12:56.783+0800	INFO	federation/federation.go:561	retry join succeed	{"plugin": "federation"}
+2023-08-18T18:12:56.783+0800	INFO	server/server.go:1409	gmqtt server started	{"tcp server listen on": ["[::]:1883"], "websocket server listen on": [":8883"]}
+2023-08-18T18:12:56.784+0800	INFO	server/api_registrar.go:238	gRPC server started	{"bind_address": "tcp://127.0.0.1:8084"}
+2023-08-18T18:12:56.784+0800	INFO	server/api_registrar.go:246	HTTP server started	{"bind_address": "tcp://127.0.0.1:8083", "gRPC_endpoint": "tcp://127.0.0.1:8084"}

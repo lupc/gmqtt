@@ -2,10 +2,14 @@ package config
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path"
+	"time"
 
+	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/yaml.v2"
@@ -226,14 +230,47 @@ func (c Config) GetLogger(config LogConfig) (l *zap.Logger, err error) {
 	if err != nil {
 		return
 	}
-	var core zapcore.Core
+	warnIoWriter := getWriter("./logs/log")
+	_ = os.Mkdir("./logs", 0755)
+	// var writer = getLogWriter()
+	var encoder = zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
 	if config.Format == "json" {
-		core = zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), os.Stdout, logLevel)
+		encoder = zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
 	}
-	if config.Format == "text" {
-		core = zapcore.NewCore(zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig()), os.Stdout, logLevel)
-	}
+	// if config.Format == "text" {
+	// 	core = zapcore.NewCore(zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig()), writer, logLevel)
+	// }
+	var coreFile = zapcore.NewCore(encoder, zapcore.AddSync(warnIoWriter), logLevel)
+	var coreConsole = zapcore.NewCore(encoder, os.Stdout, logLevel)
 
+	var core = zapcore.NewTee(coreFile, coreConsole)
 	zaplog := zap.New(core, zap.AddStacktrace(zap.ErrorLevel), zap.AddCaller())
 	return zaplog, nil
+}
+
+func getLogWriter() zapcore.WriteSyncer {
+	lumberJackLogger := &lumberjack.Logger{
+		Filename:   "./log/test.log",
+		MaxSize:    1,
+		MaxBackups: 5,
+		MaxAge:     30,
+		Compress:   false,
+	}
+	return zapcore.AddSync(lumberJackLogger)
+}
+
+// 日志文件切割
+func getWriter(filename string) io.Writer {
+	// 保存30天内的日志，每24小时(整点)分割一次日志
+	hook, err := rotatelogs.New(
+		filename+"_%Y%m%d.log",
+		rotatelogs.WithLinkName(filename),
+		rotatelogs.WithMaxAge(time.Hour*24*30),
+		rotatelogs.WithRotationTime(time.Hour*24),
+	)
+
+	if err != nil {
+		panic(err)
+	}
+	return hook
 }
