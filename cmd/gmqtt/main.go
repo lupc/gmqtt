@@ -17,6 +17,7 @@ import (
 	"github.com/DrmagicE/gmqtt/server"
 	_ "github.com/DrmagicE/gmqtt/topicalias/fifo"
 	"github.com/kardianos/service"
+	"github.com/lupc/go_service"
 )
 
 var (
@@ -46,13 +47,13 @@ func Chdir() (err error) {
 		return
 	}
 	err = os.Chdir(dir)
-	// workDir, _ := filepath.Abs("")
-	// logger.Sugar().Infof("工作目录：%v", workDir)
+	workDir, _ := filepath.Abs("")
+	fmt.Printf("工作目录：%v\n", workDir)
 	return
 }
 
 func init() {
-
+	Chdir()
 	ConfigFile = "config.yml"
 	ConfigFile2 = "config.yaml"
 
@@ -64,69 +65,7 @@ func main() {
 		DisplayName: "gmqtt MQTT Broker 服务",
 		Description: "gmqtt MQTT Broker 服务",
 	}
-	prg := &program{}
-	prg.RunFn = run
-	// var err error
-	var s, err = service.New(prg, srvConfig)
-	if err != nil {
-		fmt.Printf("创建服务出错：%v", err)
-	}
-	var name = fmt.Sprintf("服务[%v]", srvConfig.Name)
-	if len(os.Args) > 1 {
-		serviceAction := os.Args[1]
-		switch serviceAction {
-		case "install":
-			err := s.Install()
-			if err != nil {
-				fmt.Println(fmt.Sprintf("安装%v失败: ", name), err.Error())
-			} else {
-				fmt.Println(fmt.Sprintf("安装%v成功", name))
-			}
-		case "uninstall":
-			err := s.Uninstall()
-			if err != nil {
-				fmt.Println(fmt.Sprintf("卸载%v失败: ", name), err.Error())
-			} else {
-				fmt.Println(fmt.Sprintf("卸载%v成功", name))
-			}
-		case "start":
-			err := s.Start()
-			if err != nil {
-				fmt.Println(fmt.Sprintf("运行%v失败: ", name), err.Error())
-			} else {
-				fmt.Println(fmt.Sprintf("运行%v成功", name))
-			}
-		case "stop":
-			err := s.Stop()
-			if err != nil {
-				fmt.Println(fmt.Sprintf("停止%v失败: ", name), err.Error())
-			} else {
-				fmt.Println(fmt.Sprintf("停止%v成功", name))
-			}
-		}
-		return
-	}
-
-	//不带参数直接运行
-	err = s.Run()
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-type program struct {
-	RunFn func() //运行方法
-}
-
-func (p *program) Start(s service.Service) error {
-	fmt.Print("服务运行...")
-	go p.RunFn()
-	return nil
-}
-
-func (p *program) Stop(s service.Service) error {
-	fmt.Print("服务停止。")
-	return nil
+	go_service.RunWithService(srvConfig, run)
 }
 
 func GetListeners(c config.Config) (tcpListeners []net.Listener, websockets []*server.WsServer, err error) {
@@ -160,20 +99,6 @@ func GetListeners(c config.Config) (tcpListeners []net.Listener, websockets []*s
 	}
 	return
 }
-
-// func loadConfig() config.Config {
-// 	c, err := config.ParseConfig(ConfigFile)
-// 	if os.IsNotExist(err) {
-// 		c, err = config.ParseConfig(ConfigFile2)
-// 		must(err)
-// 	} else {
-// 		must(err)
-// 	}
-// 	l, err := c.GetLogger(c.Log)
-// 	must(err)
-// 	logger = l
-// 	return c
-// }
 
 func run() {
 	var err error

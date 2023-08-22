@@ -16,10 +16,13 @@ require (
 	github.com/hashicorp/serf v0.9.5
 	github.com/iancoleman/strcase v0.1.2
 	github.com/kardianos/service v1.2.2 // indirect
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f // indirect
 	github.com/lestrrat/go-strftime v0.0.0-20180220042222-ba3bf9c1d042 // indirect
+	github.com/lupc/go_service v0.0.0-20230818145336-e469a5033191 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.4.0
 	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.7.0

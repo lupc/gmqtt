@@ -8,8 +8,7 @@ import (
 	"path"
 	"time"
 
-	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
-	"github.com/natefinch/lumberjack"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/yaml.v2"
@@ -230,7 +229,7 @@ func (c Config) GetLogger(config LogConfig) (l *zap.Logger, err error) {
 	if err != nil {
 		return
 	}
-	warnIoWriter := getWriter("./logs/log")
+	warnIoWriter := getWriter("./logs/%Y-%m/gmqtt.log")
 	_ = os.Mkdir("./logs", 0755)
 	// var writer = getLogWriter()
 	var encoder = zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
@@ -248,29 +247,31 @@ func (c Config) GetLogger(config LogConfig) (l *zap.Logger, err error) {
 	return zaplog, nil
 }
 
-func getLogWriter() zapcore.WriteSyncer {
-	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "./log/test.log",
-		MaxSize:    1,
-		MaxBackups: 5,
-		MaxAge:     30,
-		Compress:   false,
-	}
-	return zapcore.AddSync(lumberJackLogger)
-}
+// func getLogWriter() zapcore.WriteSyncer {
+// 	lumberJackLogger := &lumberjack.Logger{
+// 		Filename:   "./log/test.log",
+// 		MaxSize:    1,
+// 		MaxBackups: 5,
+// 		MaxAge:     30,
+// 		Compress:   false,
+// 	}
+// 	return zapcore.AddSync(lumberJackLogger)
+// }
 
 // 日志文件切割
-func getWriter(filename string) io.Writer {
+func getWriter(logFile string) io.Writer {
 	// 保存30天内的日志，每24小时(整点)分割一次日志
-	hook, err := rotatelogs.New(
-		filename+"_%Y%m%d.log",
-		rotatelogs.WithLinkName(filename),
-		rotatelogs.WithMaxAge(time.Hour*24*30),
-		rotatelogs.WithRotationTime(time.Hour*24),
+	writer, err := rotatelogs.New(
+		logFile+".%Y%m%d",                             //每天
+		rotatelogs.WithLinkName("./logs/current.log"), //生成软链，指向最新日志文件
+		rotatelogs.WithRotationTime(24*time.Hour),     //最小为1分钟轮询。默认60s  低于1分钟就按1分钟来
+		rotatelogs.WithRotationCount(0),               //设置3份 大于3份 或到了清理时间 开始清理 0不启用
+		rotatelogs.WithMaxAge(30*24*time.Hour),        //保留30天日志
+		rotatelogs.WithRotationSize(100*1024*1024),    //设置100MB大小,当大于这个容量时，创建新的日志文件
 	)
 
 	if err != nil {
 		panic(err)
 	}
-	return hook
+	return writer
 }

@@ -1,2 +1,4 @@
 /.idea
 /vendor
+cmd/gmqtt/logs
+*.exe
