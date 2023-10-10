@@ -2,3 +2,4 @@
 /vendor
 cmd/gmqtt/logs
 *.exe
+*.zip
