@@ -18,7 +18,7 @@ listeners:
 api:
   grpc:
     # The gRPC server listen address. Supports unix socket and tcp socket.
-    - address: "tcp://127.0.0.1:8084"
+    - address: "tcp://:8084"
     #- address: "unix:///var/run/gmqttd.sock"
 #      tls:
 #        cacert: "path_to_ca_cert_file"
@@ -26,7 +26,7 @@ api:
 #        key: "path_to_key_file"
   http:
       # The HTTP server listen address. This is a reverse-proxy server in front of gRPC server.
-    - address: "tcp://127.0.0.1:8083"
+    - address: "tcp://:8083"
       map: "tcp://127.0.0.1:8084" # The backend gRPC server endpoint,
 #      tls:
 #        cacert: "path_to_ca_cert_file"
@@ -154,7 +154,7 @@ plugins:
 # plugin loading orders
 plugin_order:
   # Uncomment auth to enable authentication.
-  # - auth
+  - auth
   - prometheus
   - admin
   - federation
